@@ -70,3 +70,10 @@ so cols is: []
 - maxEmployees
 
 - if minEmployees > maxEmployees, return 400 error
+
+On Route:
+if query params are empty, get All companies
+else...
+    do filtering
+On Model:
+- add a new query to company model
