@@ -5,6 +5,14 @@ DB after each test finishes
 
 -
 
+
+- Test token
+```json
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlY2hhbmciLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNzE2Mzk5OTUyfQ.Sz6duWJwZ39CazoTCswPeV6pDR8OBtdvWEKnJm2LtKI"
+}
+```
+
 # MODELS
 
 ## company -- handle = primary key
@@ -31,3 +39,22 @@ DB after each test finishes
 
 1 job : Many applications
 1 user : Many applications
+
+
+
+```javascript
+const keys = Object.keys(dataToUpdate);
+
+const cols = keys.map((colName, idx) =>
+      `"${jsToSql[colName] || colName}"=$${idx + 1}`,
+  );
+```
+
+for each key within the the array of Object Keys (called colName),
+take the colName (key) and index
+
+jsToSql is an existing object of.... ??
+
+set jsToSql[colName] OR colName equal to $index+1
+
+so cols is: []
