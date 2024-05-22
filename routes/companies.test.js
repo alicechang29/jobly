@@ -17,6 +17,7 @@ import {
   commonBeforeEach,
   u1Token,
 } from "./_testCommon.js";
+import Company from "../models/company";
 
 
 beforeAll(commonBeforeAll);
@@ -72,6 +73,7 @@ describe("POST /companies", function () {
 /************************************** GET /companies */
 
 describe("GET /companies", function () {
+
   test("ok for anonymous user", async function () {
     const resp = await request(app).get("/companies");
     expect(resp.body).toEqual({
@@ -101,34 +103,33 @@ describe("GET /companies", function () {
         ],
     });
   });
+});
+describe("GET /companies", function () {
+  beforeEach(async function () {
+    await Company.create(
+      {
+        handle: "dishnetwork",
+        name: "Dish Network",
+        description: "tv company",
+        numEmployees: 38,
+        logoUrl: "http://dn.img"
+      });
 
-  //FIXME:
-  test("200 status for authorized users attempting to filter",
-    async function () {
-      const resp = await request(app)
-        .get("/companies")
-        .query({
-          nameLike: "apple"
-        })
-        .set("authorization", `Bearer ${u1Token}`);
+    await Company.create(
+      {
+        handle: "dishnettv",
+        name: "Dish Net TV",
+        description: "another tv company",
+        numEmployees: 10,
+        logoUrl: "http://adn.img"
+      });
+  });
 
-      expect(resp.statusCode).toEqual(200);
+  //FIXME: why isn't this working
+  // afterEach(async function () {
+  //   await db.query("ROLLBACK");
+  // });
 
-    });
-
-  //FIXME:
-  test("Throws 401 unauthorized error for anon users attempting to filter",
-    async function () {
-      const resp = await request(app)
-        .get("/companies")
-        .query({
-          nameLike: "apple"
-        });
-
-      expect(resp.statusCode).toEqual(401);
-    });
-
-  //FIXME:
   test("Filters by similar company name",
     async function () {
       const resp = await request(app)
@@ -137,23 +138,35 @@ describe("GET /companies", function () {
           nameLike: "dish net",
           minEmployees: 0,
           maxEmployees: 50
-        })
-        .set("authorization", `Bearer ${u1Token}`);
+        });
 
-      expect(resp.body).toEqual(
-        {
-          handle: "dishnetwork",
-          name: "Dish Network",
-          description: "tv company",
-          numEmployees: 38,
-          logoUrl: ""
-        }
+      expect(resp.body).toEqual({
+        companies:
+          [
+            {
+              handle: "dishnettv",
+              name: "Dish Net TV",
+              description: "another tv company",
+              numEmployees: 10,
+              logoUrl: "http://adn.img"
+            },
+            {
+              handle: "dishnetwork",
+              name: "Dish Network",
+              description: "tv company",
+              numEmployees: 38,
+              logoUrl: "http://dn.img"
+            }
+          ]
+      }
+
       );
+
+      expect(resp.statusCode).toEqual(200);
 
     });
 
-  //FIXME:
-  test("Throws 400 error for invalid queries",
+  test("Throws 400 error if minEmployee > maxEmployee input",
     async function () {
       const resp = await request(app)
         .get("/companies")
@@ -161,8 +174,21 @@ describe("GET /companies", function () {
           nameLike: "dish net",
           minEmployees: 50,
           maxEmployees: 10
-        })
-        .set("authorization", `Bearer ${u1Token}`);
+        });
+
+      expect(resp.statusCode).toEqual(400);
+
+    });
+
+  test("Throws 400 error if minEmployee or maxEmployee is not a positive int",
+    async function () {
+      const resp = await request(app)
+        .get("/companies")
+        .query({
+          nameLike: "dish net",
+          minEmployees: -30,
+          maxEmployees: "hi"
+        });
 
       expect(resp.statusCode).toEqual(400);
 
