@@ -11,7 +11,7 @@
     "test:cov": "vitest --no-file-parallelism --coverage"
   },
   "dependencies": {
-    "bcrypt": "*",
+    "bcrypt": "^5.1.1",
     "body-parser": "*",
     "colors": "*",
     "cors": "*",
@@ -19,12 +19,13 @@
     "express": "^5.0.0-beta.3",
     "jsonschema": "*",
     "jsonwebtoken": "*",
-    "morgan": "*",
-    "pg": "*"
+    "morgan": "^1.10.0",
+    "pg": "^8.11.5"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.6.0",
+    "msw": "^2.3.0",
     "supertest": "^7.0.0",
-    "vitest": "^1.6.0",
-    "@vitest/coverage-v8": "^1.6.0"
+    "vitest": "^1.6.0"
   }
 }
