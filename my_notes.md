@@ -13,6 +13,9 @@ DB after each test finishes
 }
 ```
 
+# Testing
+- beware of falsy values (company with no employees)
+
 # MODELS
 
 ## company -- handle = primary key
@@ -58,3 +61,12 @@ jsToSql is an existing object of.... ??
 set jsToSql[colName] OR colName equal to $index+1
 
 so cols is: []
+
+
+## Filtering Function
+- minEmployees
+    - companies that meet min Employee criteria
+    - what about companies that don't set this value?
+- maxEmployees
+
+- if minEmployees > maxEmployees, return 400 error
