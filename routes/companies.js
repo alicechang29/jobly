@@ -48,8 +48,50 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
-  const companies = await Company.findAll();
-  return res.json({ companies });
+
+  console.log("req query---->", req.query);
+
+  let companies;
+
+  if (Object.keys(req.query).length === 0) {
+
+    companies = await Company.findAll();
+    return res.json({ companies });
+
+  }
+
+  const nameLike = req.query.nameLike;
+  const minEmployees = Number(req.query.minEmployees) || null;
+  const maxEmployees = Number(req.query.maxEmployees) || null;
+
+  if (
+    isNaN(minEmployees) ||
+    isNaN(maxEmployees) ||
+    minEmployees < 0 ||
+    maxEmployees < 0
+  ) {
+
+    throw new BadRequestError(
+      "Min employee and/or Max employee values must be a positive integer."
+    );
+
+  } else if (minEmployees > maxEmployees) {
+
+    throw new BadRequestError(
+      "Input for min employees cannot be greater than input for max employees."
+    );
+
+  } else {
+
+    companies = await Company.getCompaniesBySearch(
+      nameLike,
+      minEmployees,
+      maxEmployees
+    );
+
+    return res.json({ companies });
+  }
+
 });
 
 /** GET /[handle]  =>  { company }
