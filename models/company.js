@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { BadRequestError, NotFoundError} from "../expressError.js";
+import { BadRequestError, NotFoundError } from "../expressError.js";
 import { sqlForPartialUpdate } from "../helpers/sql.js";
 
 /** Related functions for companies. */
@@ -36,12 +36,12 @@ class Company {
                     description,
                     num_employees AS "numEmployees",
                     logo_url AS "logoUrl"`, [
-          handle,
-          name,
-          description,
-          numEmployees,
-          logoUrl,
-        ],
+      handle,
+      name,
+      description,
+      numEmployees,
+      logoUrl,
+    ],
     );
     const company = result.rows[0];
 
@@ -62,6 +62,34 @@ class Company {
                logo_url      AS "logoUrl"
         FROM companies
         ORDER BY name`);
+    return companiesRes.rows;
+  }
+
+  /** Find companies by given search params
+    * (company name, min/max number of employees)
+   *
+   * Returns an array of company instances that match the
+   * search query: [{company1}, {company2}, ...]
+  */
+
+  static async getCompaniesBySearch(nameLike, minEmployees, maxEmployees) {
+
+    const companiesRes = await db.query(`
+        SELECT handle,
+               name,
+               description,
+               num_employees AS "numEmployees",
+               logo_url      AS "logoUrl"
+        FROM companies
+        WHERE (
+          (name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3)
+          OR(num_employees >= $2 AND num_employees <= $3)
+          OR (name ILIKE $1)
+        )
+        ORDER BY name`,
+      ["%" + nameLike + "%", minEmployees, maxEmployees]
+    );
+
     return companiesRes.rows;
   }
 
@@ -104,11 +132,11 @@ class Company {
 
   static async update(handle, data) {
     const { setCols, values } = sqlForPartialUpdate(
-        data,
-        {
-          numEmployees: "num_employees",
-          logoUrl: "logo_url",
-        });
+      data,
+      {
+        numEmployees: "num_employees",
+        logoUrl: "logo_url",
+      });
     const handleVarIdx = "$" + (values.length + 1);
 
     const querySql = `
