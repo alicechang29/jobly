@@ -10,7 +10,6 @@ import compNewSchema from "../schemas/compNew.json" with { type: "json" };
 import compUpdateSchema from "../schemas/compUpdate.json" with { type: "json" };
 import compFilterSchema from "../schemas/compFilter.json" with { type: "json" };
 import { parseReqQuery } from "../helpers/parseReqQuery.js";
-import { constructWhereClause } from "../helpers/sql.js";
 
 const router = new Router();
 
