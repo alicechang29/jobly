@@ -1,4 +1,5 @@
 import { BadRequestError } from "../expressError.js";
+import { parseReqQuery } from "./parseReqQuery.js";
 
 
 /** Given an object, dataToUpdate, ({firstName: 'Aliya', age: 32})
@@ -38,19 +39,43 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
       minEmployees: '250',
       maxEmployees: '500'
     }
- * Outputs: a WHERE clause SQL statement that can be passed
+ * Outputs: a WHERE clause SQL statement that can be passed to
+    query company model
     {
-      whereClause: 'name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3',
-      sqlUpdated: {
-        setCols: '"name"=$1, "num_employees" >=$2, "num_employees <= $3',
-        values: ['a', 250, 500]
+      whereClause: 'name ILIKE $1 AND num_employees >= $2
+        AND num_employees <= $3',
+      values: ['a', 250, 500]
     }
 
  */
-function constructWhereClause(filters) {
+function constructWhereClause(reqQuery) {
 
+  const parsedData = parseReqQuery(reqQuery);
 
+  const keys = Object.keys(parsedData);
 
+  let whereClause = "";
+  const values = [];
+
+  for (let i = 0; i < keys.length; i++) {
+    if ("nameLike" in parsedData) {
+      whereClause += `"name" ILIKE $${i + 1}`;
+      values.push("%" + parsedData.nameLike + "%");
+    }
+    if ("minEmployees" in parsedData) {
+      whereClause += `"num_employees" >=$${i + 1}`;
+      values.push(parsedData.minEmployees);
+    }
+    if ("maxEmployees" in parsedData) {
+      whereClause += `"num_employees" <=$${i + 1}`;
+      values.push(parsedData.maxEmployees);
+    }
+  }
+
+  return {
+    whereClause,
+    values
+  };
 
 
 
