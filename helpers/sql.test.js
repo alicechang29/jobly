@@ -43,35 +43,26 @@ describe("sqlForPartialUpdate", function () {
 
 
 describe("constructWhereClause", function () {
-  const reqQuery = { nameLike: 'a', minEmployees: '250', maxEmployees: '500' };
-  const jsToSql = {
-    nameLike: "name",
-  };
 
   test("checks datatype of returned object", function () {
-    const sqlUpdated = sqlForPartialUpdate(
-      parsedReqQuery(reqQuery),
-      jsToSql
-    );
 
-    const whereClause = constructWhereClause(sqlUpdated);
+    const reqQuery = { nameLike: 'a', minEmployees: '250', maxEmployees: '500' };
 
-    const filterQuery = {
-      whereClause, sqlUpdated
-    };
+    const whereClauseValues = constructWhereClause(reqQuery);
 
-    expect(typeof filterQuery.whereClause).toBe('string');
-    expect(typeof filterQuery.sqlUpdated).toBe('object');
+    expect(typeof whereClauseValues.whereClause).toBe('string');
+    expect(Array.isArray(whereClauseValues.values)).toBe(true);
 
-    /* FIXME: I WANT THIS:::
-    return {
-      whereClause: 'name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3',
-      sqlUpdated: {
-        setCols: '"name"=$1, "num_employees" >=$2, "num_employees <= $3',
-        values: ['a', 250, 500]
-      }
-    };
-    */
+  });
+
+  test("construct where clause with only 1 input", function () {
+
+    const reqQuery = { nameLike: 'a' };
+
+    const whereClauseValues = constructWhereClause(reqQuery);
+
+    expect(whereClauseValues.whereClause).toEqual('"name" ILIKE $1');
+
   });
 
 });
