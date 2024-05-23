@@ -195,7 +195,7 @@ describe("GET /companies", function () {
         });
 
       expect(resp.statusCode).toEqual(400);
-
+      //FIXME: test that correct error message is sent
 
     });
 
@@ -220,6 +220,23 @@ describe("GET /companies", function () {
       );
 
     });
+
+  test("Throws 400 error if min employee is NaN",
+    async function () {
+      const resp = await request(app)
+        .get("/companies")
+        .query({
+          nameLike: "dish net",
+          minEmployees: "corn",
+        });
+
+      expect(resp.statusCode).toEqual(400);
+
+      expect(resp.body.error.message).toEqual([
+        "instance.minEmployees is not of a type(s) integer"
+      ]);
+    });
+
 });
 
 /************************************** GET /companies/:handle */
