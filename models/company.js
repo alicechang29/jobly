@@ -72,7 +72,10 @@ class Company {
    * search query: [{company1}, {company2}, ...]
   */
 
-  static async getCompaniesBySearch(nameLike, minEmployees = 0, maxEmployees = 99999999) {
+  static async getCompaniesBySearch(
+    nameLike,
+    minEmployees = 0,
+    maxEmployees = 99999999) {
 
     const companiesRes = await db.query(`
         SELECT handle,
