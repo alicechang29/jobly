@@ -5,13 +5,14 @@ DB after each test finishes
 
 -
 
-1. write test for Where helper fn
-2. write Where helper fn
+1. write test for Where helper fn - DONE
+2. write Where helper fn - DONE
 3. write test for model fn
-4. fix model fn
-5. fix json schema
-6. update company test
-7. fix company routes
+4. fix model fn - DONE
+5. fix json schema - DONE
+6. update company test - DONE
+7. fix company routes - DONE
+
 
 
 
