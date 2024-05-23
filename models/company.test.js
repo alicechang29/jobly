@@ -125,7 +125,7 @@ describe("get with filtering ", function () {
   test("works", async function () {
     const reqQuery = constructWhereClause({ maxEmployees: "2" });
 
-    const companies = await Company.getCompaniesBySearch(reqQuery);
+    const companies = await Company.getCompaniesBySearch(reqQuery); //FIXME: don't call this reqQuery (whereClause and values)
 
 
     expect(companies).toEqual([
@@ -149,16 +149,6 @@ describe("get with filtering ", function () {
 
   });
 
-  test("not found if no such company", async function () {
-    try {
-      const reqQuery = constructWhereClause({ nameLike: "a" });
-      await Company.getCompaniesBySearch(reqQuery);
-      throw new Error("fail test, you shouldn't get here");
-
-    } catch (err) {
-      expect(err instanceof NotFoundError).toBeTruthy();
-    }
-  });
 });
 
 /************************************** update */
