@@ -178,6 +178,10 @@ describe("GET /companies", function () {
 
       expect(resp.statusCode).toEqual(400);
 
+      expect(resp.body.error.message).toEqual(
+        "min needs to be less than max input"
+      );
+
     });
 
   test("Throws 400 error if minEmployee or maxEmployee is not a positive int",
@@ -191,6 +195,29 @@ describe("GET /companies", function () {
         });
 
       expect(resp.statusCode).toEqual(400);
+
+
+    });
+
+  test("Throws 400 error if request query contains invalid fields",
+    async function () {
+      const resp = await request(app)
+        .get("/companies")
+        .query({
+          nameLike: "dish net",
+          minEmployees: -30,
+          corn: 1
+        });
+
+      expect(resp.statusCode).toEqual(400);
+
+      expect(resp.body.error.message).toEqual(
+        [
+          "instance.minEmployees must be greater than or equal to 0",
+          "instance is not allowed to have the additional property \"corn\""
+        ]
+
+      );
 
     });
 });
