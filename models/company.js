@@ -86,10 +86,6 @@ class Company {
       whereClauseValues.values
     );
 
-    if (companiesRes.rows.length === 0) {
-      throw new NotFoundError("No companies match criteria");
-    }
-
     return companiesRes.rows;
   }
 
