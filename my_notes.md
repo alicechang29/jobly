@@ -5,16 +5,21 @@ DB after each test finishes
 
 -
 
+1. write test for Where helper fn
+2. write Where helper fn
+3. write test for model fn
+4. fix model fn
+5. fix json schema
+6. update company test
+7. fix company routes
 
-- Test token
-```json
-{
-	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlY2hhbmciLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNzE2Mzk5OTUyfQ.Sz6duWJwZ39CazoTCswPeV6pDR8OBtdvWEKnJm2LtKI"
-}
-```
 
-# Testing
+
+# Testing - TODO:
 - beware of falsy values (company with no employees)
+- where clause helper fn
+- model - filter test
+- fix json schema validator - remove the null bc now can check via the where fn
 
 # MODELS
 
@@ -44,14 +49,6 @@ DB after each test finishes
 1 user : Many applications
 
 
-
-```javascript
-const keys = Object.keys(dataToUpdate);
-
-const cols = keys.map((colName, idx) =>
-      `"${jsToSql[colName] || colName}"=$${idx + 1}`,
-  );
-```
 
 for each key within the the array of Object Keys (called colName),
 take the colName (key) and index
