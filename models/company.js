@@ -72,6 +72,7 @@ class Company {
    * search query: [{company1}, {company2}, ...]
   */
 
+  //FIXME:
   static async getCompaniesBySearch(
     nameLike,
     minEmployees = 0,
