@@ -76,6 +76,7 @@ router.get("/", async function (req, res, next) {
     throw new BadRequestError(errs);
   }
 
+  //TODO: pass where clause helper function here instead
   companies = await Company.getCompaniesBySearch(
     parsedQuery.nameLike,
     parsedQuery.minEmployees,
