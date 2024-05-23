@@ -26,7 +26,10 @@ function parseReqQuery(reqQuery) {
   if ("maxEmployees" in reqQuery) {
     reqQuery.maxEmployees = Number(reqQuery.maxEmployees);
   }
-
+  //TODO: relation between values is determined within the model.
+  //Routes only care about validating if the data type is correct
+  // Move validation check into model -- can move json schema validator into model
+  //no logic would be done in the route if ^^^ (don't do this right now )
   if ("maxEmployees" in reqQuery && "minEmployees" in reqQuery) {
     if (reqQuery.minEmployees > reqQuery.maxEmployees) {
       throw new BadRequestError("min needs to be less than max input");
