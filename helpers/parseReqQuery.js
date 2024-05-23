@@ -2,11 +2,26 @@ import { BadRequestError } from "../expressError.js";
 
 /**Given req.query object with string values,
  * parses values into correct data types and returns as object
+ * Example Input:
+    {
+      nameLike: 'a',
+      minEmployees: '250',
+      maxEmployees: '500'
+    }
+ * Example Output:
+    {
+      nameLike: 'a',
+      minEmployees: 250,
+      maxEmployees: 500
+    }
+
  */
 function parseReqQuery(reqQuery) {
 
+
   if ("minEmployees" in reqQuery) {
     reqQuery.minEmployees = Number(reqQuery.minEmployees);
+
   }
 
   if ("maxEmployees" in reqQuery) {
