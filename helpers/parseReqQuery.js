@@ -12,6 +12,13 @@ function parseReqQuery(reqQuery) {
   if ("maxEmployees" in reqQuery) {
     reqQuery.maxEmployees = Number(reqQuery.maxEmployees);
   }
+
+  if ("maxEmployees" in reqQuery && "minEmployees" in reqQuery) {
+    if (reqQuery.minEmployees > reqQuery.maxEmployees) {
+      throw new BadRequestError("min needs to be less than max input");
+    }
+  }
+
   console.log("parse", reqQuery);
   return reqQuery;
 
