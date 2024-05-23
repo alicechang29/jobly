@@ -8,6 +8,8 @@ import { ensureLoggedIn } from "../middleware/auth.js";
 import Company from "../models/company.js";
 import compNewSchema from "../schemas/compNew.json" with { type: "json" };
 import compUpdateSchema from "../schemas/compUpdate.json" with { type: "json" };
+import compFilterSchema from "../schemas/compFilter.json" with { type: "json" };
+import { parseReqQuery } from "../helpers/parseReqQuery.js";
 
 const router = new Router();
 
@@ -60,37 +62,27 @@ router.get("/", async function (req, res, next) {
 
   }
 
-  const nameLike = req.query.nameLike;
-  const minEmployees = Number(req.query.minEmployees) || null;
-  const maxEmployees = Number(req.query.maxEmployees) || null;
+  const parsedQuery = parseReqQuery(req.query);
 
-  if (
-    isNaN(minEmployees) ||
-    isNaN(maxEmployees) ||
-    minEmployees < 0 ||
-    maxEmployees < 0
-  ) {
+  console.log("parsedQuery ---->", parsedQuery);
 
-    throw new BadRequestError(
-      "Min employee and/or Max employee values must be a positive integer."
-    );
+  const result = jsonschema.validate(
+    parsedQuery, compFilterSchema, { required: true });
 
-  } else if (minEmployees > maxEmployees) {
+  console.log("result---->", result);
 
-    throw new BadRequestError(
-      "Input for min employees cannot be greater than input for max employees."
-    );
-
-  } else {
-
-    companies = await Company.getCompaniesBySearch(
-      nameLike,
-      minEmployees,
-      maxEmployees
-    );
-
-    return res.json({ companies });
+  if (!result.valid) {
+    const errs = result.errors.map(err => err.stack);
+    throw new BadRequestError(errs);
   }
+
+  companies = await Company.getCompaniesBySearch(
+    parsedQuery.nameLike,
+    parsedQuery.minEmployees,
+    parsedQuery.maxEmployees
+  );
+
+  return res.json({ companies });
 
 });
 
