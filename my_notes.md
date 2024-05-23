@@ -77,3 +77,11 @@ else...
     do filtering
 On Model:
 - add a new query to company model
+
+
+
+ (name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3)
+          OR(num_employees >= $2 AND num_employees <= $3)
+          OR(num_employees >=$2)
+          OR(num_employees <=$3)
+          OR (name ILIKE $1)
