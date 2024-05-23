@@ -10,7 +10,8 @@ import {
 
 import db from "../db.js";
 import { BadRequestError, NotFoundError } from "../expressError.js";
-import { constructWhereClause } from "../helpers/sql.js";
+import { parseReqQuery } from "../helpers/parseReqQuery.js";
+
 import Company from "./company.js";
 import {
   commonAfterAll,
@@ -123,9 +124,9 @@ describe("get", function () {
 /************************************** get with filtering */
 describe("get with filtering ", function () {
   test("works", async function () {
-    const reqQuery = constructWhereClause({ maxEmployees: "2" });
+    const parsedData = Company.constructWhereClause({ maxEmployees: 2 });
 
-    const companies = await Company.getCompaniesBySearch(reqQuery); //FIXME: don't call this reqQuery (whereClause and values)
+    const companies = await Company.getCompaniesBySearch(parsedData);
 
 
     expect(companies).toEqual([
@@ -212,6 +213,7 @@ describe("update", function () {
     try {
       await Company.update("nope", updateData);
       throw new Error("fail test, you shouldn't get here");
+
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
@@ -244,5 +246,66 @@ describe("remove", function () {
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
+  });
+});
+
+
+/************************************** whereClause constructor method */
+
+describe("constructWhereClause", function () {
+
+  test("checks datatype of returned object", async function () {
+
+    const reqQuery = {
+      nameLike: 'a',
+      minEmployees: '250',
+      maxEmployees: '500'
+    };
+
+    const parsedData = parseReqQuery(reqQuery);
+
+    const whereClauseValues = await Company.constructWhereClause(parsedData);
+
+    expect(typeof whereClauseValues.whereClause).toBe('string');
+    expect(Array.isArray(whereClauseValues.values)).toBe(true);
+
+  });
+
+  test("construct where clause with only 1 input", async function () {
+
+    const reqQuery = { nameLike: 'a' };
+
+    const parsedData = parseReqQuery(reqQuery);
+
+    const whereClauseValues = await Company.constructWhereClause(parsedData);
+
+    expect(whereClauseValues).toEqual({
+      whereClause: '"name" ILIKE $1',
+      values: ["%a%"]
+    });
+
+  });
+
+  test("construct where clause with 3 inputs", async function () {
+
+    const reqQuery = {
+      nameLike: 'a',
+      minEmployees: '250',
+      maxEmployees: '500'
+    };
+
+    const parsedData = parseReqQuery(reqQuery);
+
+    const whereClauseValues = await Company.constructWhereClause(parsedData);
+
+    expect(whereClauseValues).toEqual(
+      {
+        whereClause:
+          '"name" ILIKE $1 AND "num_employees" >=$2 AND "num_employees" <=$3',
+        values: ["%a%", 250, 500]
+      }
+    );
+
+
   });
 });
