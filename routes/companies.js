@@ -41,8 +41,9 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 
 /** GET /  =>
  *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
+ * Get all companies if no filter parameters provided.
  *
- * Can filter on provided search filters:
+ * Can filter companies based on provided filter parameters.
  * - minEmployees
  * - maxEmployees
  * - nameLike (will find case-insensitive, partial matches)
