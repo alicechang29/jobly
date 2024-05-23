@@ -10,6 +10,7 @@ import {
 
 import db from "../db.js";
 import { BadRequestError, NotFoundError } from "../expressError.js";
+import { constructWhereClause } from "../helpers/sql.js";
 import Company from "./company.js";
 import {
   commonAfterAll,
@@ -113,6 +114,47 @@ describe("get", function () {
     try {
       await Company.get("nope");
       throw new Error("fail test, you shouldn't get here");
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
+
+/************************************** get with filtering */
+describe("get with filtering ", function () {
+  test("works", async function () {
+    const reqQuery = constructWhereClause({ maxEmployees: "2" });
+
+    const companies = await Company.getCompaniesBySearch(reqQuery);
+
+
+    expect(companies).toEqual([
+      {
+        handle: 'c1',
+        name: 'C1',
+        numEmployees: 1,
+        description: 'Desc1',
+        logoUrl: 'http://c1.img'
+      },
+      {
+        handle: 'c2',
+        name: 'C2',
+        numEmployees: 2,
+        description: 'Desc2',
+        logoUrl: 'http://c2.img'
+      }
+    ]
+
+    );
+
+  });
+
+  test("not found if no such company", async function () {
+    try {
+      const reqQuery = constructWhereClause({ nameLike: "a" });
+      await Company.getCompaniesBySearch(reqQuery);
+      throw new Error("fail test, you shouldn't get here");
+
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
