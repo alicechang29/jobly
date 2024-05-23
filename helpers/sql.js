@@ -2,8 +2,9 @@ import { BadRequestError } from "../expressError.js";
 
 
 /** Given an object, dataToUpdate, ({firstName: 'Aliya', age: 32})
- * and an an object (jsToSql) containing the conversion of variable names
- * written in  camelCase to snake_case,
+ * and an an object, jsToSql, containing the conversion of variable names
+ * ({first_name: firstName}), matching snake_case to camelCase.
+ *
  * Converts each key's value within dataToUpdate into a parameterized query
  * variable to protect against SQL injection.
  *
@@ -29,4 +30,30 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-export { sqlForPartialUpdate };
+
+/**FIXME: Constructs a WHERE clause for SQL statements based on
+ * user inputs.
+ *  {
+      nameLike: 'a',
+      minEmployees: '250',
+      maxEmployees: '500'
+    }
+ * Outputs: a WHERE clause SQL statement that can be passed
+    {
+      whereClause: 'name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3',
+      sqlUpdated: {
+        setCols: '"name"=$1, "num_employees" >=$2, "num_employees <= $3',
+        values: ['a', 250, 500]
+    }
+
+ */
+function constructWhereClause(filters) {
+
+
+
+
+
+
+}
+
+export { sqlForPartialUpdate, constructWhereClause };
