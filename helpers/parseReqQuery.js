@@ -1,7 +1,7 @@
 import { BadRequestError } from "../expressError.js";
 
 /**Given req.query object with string values,
- * parses values into correct data types and returns as object
+ * parses values into correct data types and returns mutated object
  * Example Input:
     {
       nameLike: 'a',
