@@ -10,6 +10,7 @@ import compNewSchema from "../schemas/compNew.json" with { type: "json" };
 import compUpdateSchema from "../schemas/compUpdate.json" with { type: "json" };
 import compFilterSchema from "../schemas/compFilter.json" with { type: "json" };
 import { parseReqQuery } from "../helpers/parseReqQuery.js";
+import { constructWhereClause } from "../helpers/sql.js";
 
 const router = new Router();
 
@@ -51,8 +52,6 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
 
-  console.log("req query---->", req.query);
-
   let companies;
 
   if (Object.keys(req.query).length === 0) {
@@ -64,23 +63,16 @@ router.get("/", async function (req, res, next) {
 
   const parsedQuery = parseReqQuery(req.query);
 
-  console.log("parsedQuery ---->", parsedQuery);
-
   const result = jsonschema.validate(
     parsedQuery, compFilterSchema, { required: true });
-
-  console.log("result---->", result);
 
   if (!result.valid) {
     const errs = result.errors.map(err => err.stack);
     throw new BadRequestError(errs);
   }
 
-  //TODO: pass where clause helper function here instead
   companies = await Company.getCompaniesBySearch(
-    parsedQuery.nameLike,
-    parsedQuery.minEmployees,
-    parsedQuery.maxEmployees
+    constructWhereClause(parsedQuery)
   );
 
   return res.json({ companies });
