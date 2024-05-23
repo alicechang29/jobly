@@ -1,16 +1,16 @@
 import { describe, test, expect } from "vitest";
 
-import { sqlForPartialUpdate } from "./sql.js";
-
-const dataToUpdate = { firstName: 'Aliya', age: 32 };
-const jsToSql = {
-  firstName: "first_name",
-  lastName: "last_name",
-  isAdmin: "is_admin",
-};
+import { sqlForPartialUpdate, constructWhereClause } from "./sql.js";
 
 
 describe("sqlForPartialUpdate", function () {
+  const dataToUpdate = { firstName: 'Aliya', age: 32 };
+  const jsToSql = {
+    firstName: "first_name",
+    lastName: "last_name",
+    isAdmin: "is_admin",
+  };
+
   test("returns a correctly converted object", function () {
     const updates = sqlForPartialUpdate(dataToUpdate, jsToSql);
 
@@ -42,6 +42,38 @@ describe("sqlForPartialUpdate", function () {
 });
 
 
-// test if given object is converting to correct $1 variable
+describe("constructWhereClause", function () {
+  const reqQuery = { nameLike: 'a', minEmployees: '250', maxEmployees: '500' };
+  const jsToSql = {
+    nameLike: "name",
+  };
 
-//test if object
+  test("checks datatype of returned object", function () {
+    const sqlUpdated = sqlForPartialUpdate(
+      parsedReqQuery(reqQuery),
+      jsToSql
+    );
+
+    const whereClause = constructWhereClause(sqlUpdated);
+
+    const filterQuery = {
+      whereClause, sqlUpdated
+    };
+
+    expect(typeof filterQuery.whereClause).toBe('string');
+    expect(typeof filterQuery.sqlUpdated).toBe('object');
+
+    /* FIXME: I WANT THIS:::
+    return {
+      whereClause: 'name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3',
+      sqlUpdated: {
+        setCols: '"name"=$1, "num_employees" >=$2, "num_employees <= $3',
+        values: ['a', 250, 500]
+      }
+    };
+    */
+  });
+
+});
+
+
