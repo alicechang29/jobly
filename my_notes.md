@@ -7,7 +7,7 @@ DB after each test finishes
 
 1. write test for Where helper fn - DONE
 2. write Where helper fn - DONE
-3. write test for model fn
+3. write test for model fn - DONE
 4. fix model fn - DONE
 5. fix json schema - DONE
 6. update company test - DONE
