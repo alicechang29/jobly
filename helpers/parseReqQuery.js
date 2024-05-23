@@ -18,7 +18,6 @@ import { BadRequestError } from "../expressError.js";
  */
 function parseReqQuery(reqQuery) {
 
-
   if ("minEmployees" in reqQuery) {
     reqQuery.minEmployees = Number(reqQuery.minEmployees);
 
