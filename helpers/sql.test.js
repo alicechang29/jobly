@@ -21,15 +21,6 @@ describe("sqlForPartialUpdate", function () {
       }
     );
 
-    expect(updates.setCols).toContain('$');
-
-  });
-
-  test("checks for setCols to contain parameterized queries", function () {
-    const updates = sqlForPartialUpdate(dataToUpdate, jsToSql);
-
-    expect(updates.setCols).toContain('$');
-
   });
 
   test("checks datatype of returned object", function () {
@@ -65,7 +56,10 @@ describe("constructWhereClause", function () {
 
     const whereClauseValues = constructWhereClause(reqQuery);
 
-    expect(whereClauseValues.whereClause).toEqual('"name" ILIKE $1');
+    expect(whereClauseValues).toEqual({
+      whereClause: '"name" ILIKE $1',
+      values: ["%a%"]
+    });
 
   });
 
@@ -79,9 +73,14 @@ describe("constructWhereClause", function () {
 
     const whereClauseValues = constructWhereClause(reqQuery);
 
-    expect(whereClauseValues.whereClause).toEqual(
-      '"name" ILIKE $1 AND "num_employees" >=$2 AND "num_employees" <=$3'
+    expect(whereClauseValues).toEqual(
+      {
+        whereClause:
+          '"name" ILIKE $1 AND "num_employees" >=$2 AND "num_employees" <=$3',
+        values: ["%a%", 250, 500]
+      }
     );
+
 
   });
 
