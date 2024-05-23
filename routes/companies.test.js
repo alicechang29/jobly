@@ -18,7 +18,7 @@ import {
   u1Token,
 } from "./_testCommon.js";
 import Company from "../models/company";
-import { parseReqQuery } from "../helpers/parseReqQuery.js";
+
 
 
 beforeAll(commonBeforeAll);
@@ -196,7 +196,11 @@ describe("GET /companies", function () {
         });
 
       expect(resp.statusCode).toEqual(400);
-      //FIXME: test that correct error message is sent
+
+      expect(resp.body.error.message).toEqual([
+        "instance.minEmployees must be greater than or equal to 0",
+        "instance.maxEmployees is not of a type(s) integer"
+      ]);
 
     });
 
@@ -240,65 +244,7 @@ describe("GET /companies", function () {
 
 });
 
-/************************************** whereClause constructor method */
 
-describe("constructWhereClause", function () {
-
-  test("checks datatype of returned object", async function () {
-
-    const reqQuery = {
-      nameLike: 'a',
-      minEmployees: '250',
-      maxEmployees: '500'
-    };
-
-    const parsedData = parseReqQuery(reqQuery);
-
-    const whereClauseValues = await Company.constructWhereClause(parsedData);
-
-    expect(typeof whereClauseValues.whereClause).toBe('string');
-    expect(Array.isArray(whereClauseValues.values)).toBe(true);
-
-  });
-
-  test("construct where clause with only 1 input", async function () {
-
-    const reqQuery = { nameLike: 'a' };
-
-    const parsedData = parseReqQuery(reqQuery);
-
-    const whereClauseValues = await Company.constructWhereClause(parsedData);
-
-    expect(whereClauseValues).toEqual({
-      whereClause: '"name" ILIKE $1',
-      values: ["%a%"]
-    });
-
-  });
-
-  test("construct where clause with 3 inputs", async function () {
-
-    const reqQuery = {
-      nameLike: 'a',
-      minEmployees: '250',
-      maxEmployees: '500'
-    };
-
-    const parsedData = parseReqQuery(reqQuery);
-
-    const whereClauseValues = await Company.constructWhereClause(parsedData);
-
-    expect(whereClauseValues).toEqual(
-      {
-        whereClause:
-          '"name" ILIKE $1 AND "num_employees" >=$2 AND "num_employees" <=$3',
-        values: ["%a%", 250, 500]
-      }
-    );
-
-
-  });
-});
 
 /************************************** GET /companies/:handle */
 
