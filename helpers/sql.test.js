@@ -46,7 +46,11 @@ describe("constructWhereClause", function () {
 
   test("checks datatype of returned object", function () {
 
-    const reqQuery = { nameLike: 'a', minEmployees: '250', maxEmployees: '500' };
+    const reqQuery = {
+      nameLike: 'a',
+      minEmployees: '250',
+      maxEmployees: '500'
+    };
 
     const whereClauseValues = constructWhereClause(reqQuery);
 
@@ -62,6 +66,22 @@ describe("constructWhereClause", function () {
     const whereClauseValues = constructWhereClause(reqQuery);
 
     expect(whereClauseValues.whereClause).toEqual('"name" ILIKE $1');
+
+  });
+
+  test("construct where clause with 3 inputs", function () {
+
+    const reqQuery = {
+      nameLike: 'a',
+      minEmployees: '250',
+      maxEmployees: '500'
+    };
+
+    const whereClauseValues = constructWhereClause(reqQuery);
+
+    expect(whereClauseValues.whereClause).toEqual(
+      '"name" ILIKE $1 AND "num_employees" >=$2 AND "num_employees" <=$3'
+    );
 
   });
 
