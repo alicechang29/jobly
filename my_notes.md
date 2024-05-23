@@ -1,17 +1,11 @@
-Code Review Q's:
-- _testCommon is setting up the test DB with what is needed before each test is run and cleaning up the
-DB after each test finishes
-    - don't have to write this by hand for each test bc it is the same setup for all tests
+1. write test - companies.test.js (routes) - DONE
+2. write test - where clause constructor - DONE
+3. move constructWhereClause into company model - DONE
+4. move ^^^ tests into company models tests - DONE
+5. remove where clause from sql - DONE
+6. remove where clause from sql test - DONE
+7. remove import from company route  - DONE
 
--
-
-1. write test for Where helper fn - DONE
-2. write Where helper fn - DONE
-3. write test for model fn - DONE
-4. fix model fn - DONE
-5. fix json schema - DONE
-6. update company test - DONE
-7. fix company routes - DONE
 
 
 
