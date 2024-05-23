@@ -104,7 +104,7 @@ class Company {
         values: ['a', 250, 500]
       }
    */
-  static async constructWhereClause(filteredData) {
+  static constructWhereClause(filteredData) {
     const keys = Object.keys(filteredData);
 
     let whereClause = [];
