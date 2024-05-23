@@ -105,7 +105,7 @@ class Company {
       }
    */
   static async constructWhereClause(filteredData) {
-    const keys = Object.keys(parsedData);
+    const keys = Object.keys(filteredData);
 
     let whereClause = [];
     const values = [];
@@ -113,19 +113,19 @@ class Company {
     let i = 0;
 
     while (i < keys.length) {
-      if ("nameLike" in parsedData) {
+      if ("nameLike" in filteredData) {
         whereClause.push(`"name" ILIKE $${i + 1}`);
-        values.push("%" + parsedData.nameLike + "%");
+        values.push("%" + filteredData.nameLike + "%");
         i++;
       }
-      if ("minEmployees" in parsedData) {
+      if ("minEmployees" in filteredData) {
         whereClause.push(`"num_employees" >=$${i + 1}`);
-        values.push(parsedData.minEmployees);
+        values.push(filteredData.minEmployees);
         i++;
       }
-      if ("maxEmployees" in parsedData) {
+      if ("maxEmployees" in filteredData) {
         whereClause.push(`"num_employees" <=$${i + 1}`);
-        values.push(parsedData.maxEmployees);
+        values.push(filteredData.maxEmployees);
         i++;
       }
     }
