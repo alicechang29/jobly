@@ -65,18 +65,14 @@ class Company {
     return companiesRes.rows;
   }
 
-  /** Find companies by given search params
-    * (company name, min/max number of employees)
+  /** Given a constructed where clause object that contains:
+   * {whereClause, values}
    *
    * Returns an array of company instances that match the
    * search query: [{company1}, {company2}, ...]
   */
 
-  //FIXME:
-  static async getCompaniesBySearch(
-    nameLike,
-    minEmployees = 0,
-    maxEmployees = 99999999) {
+  static async getCompaniesBySearch(whereClauseValues) {
 
     const companiesRes = await db.query(`
         SELECT handle,
@@ -85,11 +81,9 @@ class Company {
                num_employees  AS "numEmployees",
                logo_url       AS "logoUrl"
         FROM companies
-        WHERE (
-          (name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3)
-        )
+        WHERE ${whereClauseValues.whereClause}
         ORDER BY name`,
-      ["%" + nameLike + "%", minEmployees, maxEmployees]
+      whereClauseValues.values
     );
 
     return companiesRes.rows;
