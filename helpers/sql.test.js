@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 
-import { sqlForPartialUpdate, constructWhereClause } from "./sql.js";
+import { sqlForPartialUpdate } from "./sql.js";
 
 
 describe("sqlForPartialUpdate", function () {
@@ -33,57 +33,5 @@ describe("sqlForPartialUpdate", function () {
 });
 
 
-describe("constructWhereClause", function () {
-
-  test("checks datatype of returned object", function () {
-
-    const reqQuery = {
-      nameLike: 'a',
-      minEmployees: '250',
-      maxEmployees: '500'
-    };
-
-    const whereClauseValues = constructWhereClause(reqQuery);
-
-    expect(typeof whereClauseValues.whereClause).toBe('string');
-    expect(Array.isArray(whereClauseValues.values)).toBe(true);
-
-  });
-
-  test("construct where clause with only 1 input", function () {
-
-    const reqQuery = { nameLike: 'a' };
-
-    const whereClauseValues = constructWhereClause(reqQuery);
-
-    expect(whereClauseValues).toEqual({
-      whereClause: '"name" ILIKE $1',
-      values: ["%a%"]
-    });
-
-  });
-
-  test("construct where clause with 3 inputs", function () {
-
-    const reqQuery = {
-      nameLike: 'a',
-      minEmployees: '250',
-      maxEmployees: '500'
-    };
-
-    const whereClauseValues = constructWhereClause(reqQuery);
-
-    expect(whereClauseValues).toEqual(
-      {
-        whereClause:
-          '"name" ILIKE $1 AND "num_employees" >=$2 AND "num_employees" <=$3',
-        values: ["%a%", 250, 500]
-      }
-    );
-
-
-  });
-
-});
 
 
