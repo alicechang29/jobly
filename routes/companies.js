@@ -72,9 +72,9 @@ router.get("/", async function (req, res, next) {
     throw new BadRequestError(errs);
   }
 
-  companies = await Company.getCompaniesBySearch(
-    constructWhereClause(parsedQuery)
-  );
+  const constructedWhereClause = await Company.constructWhereClause(parsedQuery);
+
+  companies = await Company.getCompaniesBySearch(constructedWhereClause);
 
   return res.json({ companies });
 
