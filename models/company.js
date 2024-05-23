@@ -72,19 +72,17 @@ class Company {
    * search query: [{company1}, {company2}, ...]
   */
 
-  static async getCompaniesBySearch(nameLike, minEmployees, maxEmployees) {
+  static async getCompaniesBySearch(nameLike, minEmployees = 0, maxEmployees = 99999999) {
 
     const companiesRes = await db.query(`
         SELECT handle,
                name,
                description,
-               num_employees AS "numEmployees",
-               logo_url      AS "logoUrl"
+               num_employees  AS "numEmployees",
+               logo_url       AS "logoUrl"
         FROM companies
         WHERE (
           (name ILIKE $1 AND num_employees >= $2 AND num_employees <= $3)
-          OR(num_employees >= $2 AND num_employees <= $3)
-          OR (name ILIKE $1)
         )
         ORDER BY name`,
       ["%" + nameLike + "%", minEmployees, maxEmployees]
