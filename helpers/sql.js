@@ -32,18 +32,18 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 }
 
 
-/**FIXME: Constructs a WHERE clause for SQL statements based on
+/**Constructs a WHERE clause for SQL statements based on
  * user inputs.
  *  {
       nameLike: 'a',
       minEmployees: '250',
       maxEmployees: '500'
     }
- * Outputs: a WHERE clause SQL statement that can be passed to
+ * Outputs: a WHERE clause SQL statement object that can be passed to
     query company model
     {
-      whereClause: 'name ILIKE $1 AND num_employees >= $2
-        AND num_employees <= $3',
+      whereClause: '"name" ILIKE $1 AND "num_employees" >= $2
+        AND "num_employees" <= $3',
       values: ['a', 250, 500]
     }
 
@@ -54,30 +54,35 @@ function constructWhereClause(reqQuery) {
 
   const keys = Object.keys(parsedData);
 
-  let whereClause = "";
+  let whereClause = [];
   const values = [];
 
-  for (let i = 0; i < keys.length; i++) {
+  let i = 0;
+
+  while (i < keys.length) {
     if ("nameLike" in parsedData) {
-      whereClause += `"name" ILIKE $${i + 1}`;
+      whereClause.push(`"name" ILIKE $${i + 1}`);
       values.push("%" + parsedData.nameLike + "%");
+      i++;
     }
     if ("minEmployees" in parsedData) {
-      whereClause += `"num_employees" >=$${i + 1}`;
+      whereClause.push(`"num_employees" >=$${i + 1}`);
       values.push(parsedData.minEmployees);
+      i++;
     }
     if ("maxEmployees" in parsedData) {
-      whereClause += `"num_employees" <=$${i + 1}`;
+      whereClause.push(`"num_employees" <=$${i + 1}`);
       values.push(parsedData.maxEmployees);
+      i++;
     }
   }
+
+  whereClause = whereClause.join(" AND ");
 
   return {
     whereClause,
     values
   };
-
-
 
 }
 
