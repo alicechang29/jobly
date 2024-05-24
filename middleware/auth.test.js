@@ -108,7 +108,7 @@ describe("ensureLoggedInAdmin", function () {
   });
 });
 
-//FIXME: not sure if these work
+
 describe("ensureCorrectUserOrAdmin", function () {
   test("auth if matching user identity", function () {
     const req = { params: { username: "test" } };
@@ -119,7 +119,7 @@ describe("ensureCorrectUserOrAdmin", function () {
   test("auth if admin and not matching user identity",
     function () {
       const req = { params: { username: "test" } };
-      const res = { locals: { user: { isAdmin: true } } };
+      const res = { locals: { user: { username: "notTest", isAdmin: true } } };
       ensureCorrectUserOrAdmin(req, res, next);
     });
 
