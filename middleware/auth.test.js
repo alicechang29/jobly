@@ -5,7 +5,8 @@ import { UnauthorizedError } from "../expressError.js";
 import {
   authenticateJWT,
   ensureLoggedIn,
-  ensureAdmin
+  ensureAdmin,
+  userCheck
 } from "./auth.js";
 import { SECRET_KEY } from "../config.js";
 
@@ -104,5 +105,21 @@ describe("ensureAdmin", function () {
     const res = { locals: { user: {} } };
     expect(() => ensureAdmin(req, res, next))
       .toThrow(UnauthorizedError);
+  });
+});
+
+//FIXME: not sure if these work
+describe("checkUserIdentity", function () {
+  test("username param matches user identity", function () {
+    const req = { params: { username: "test" } };
+    const res = { locals: { user: { username: "test" } } };
+    userCheck(req, res, next);
+  });
+
+  test("username param does not matche user identity", function () {
+    const req = { params: { username: "corn" } };
+    const res = { locals: {} };
+    ensureAdmin(req, res, next);
+
   });
 });
