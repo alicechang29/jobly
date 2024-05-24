@@ -3,7 +3,7 @@
 import jsonschema from "jsonschema";
 import { Router } from "express";
 
-import { ensureLoggedIn } from "../middleware/auth.js";
+import { ensureLoggedIn, ensureAdmin, userCheck } from "../middleware/auth.js";
 import { BadRequestError } from "../expressError.js";
 import User from "../models/user.js";
 import { createToken } from "../helpers/tokens.js";
@@ -23,7 +23,7 @@ const router = Router();
  * This returns the newly created user and an authentication token for them:
  *  {user: { username, firstName, lastName, email, isAdmin }, token }
  *
- * Authorization required: login
+ * Authorization required: login and is Admin
  **/
 
 router.post("/", ensureLoggedIn, async function (req, res, next) {
@@ -47,7 +47,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  *
  * Returns list of all users.
  *
- * Authorization required: login
+ * Authorization required: login and is Admin
  **/
 
 router.get("/", ensureLoggedIn, async function (req, res, next) {
@@ -60,7 +60,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
  *
  * Returns { username, firstName, lastName, email, isAdmin }
  *
- * Authorization required: login
+ * Authorization required: login and either is an Admin or is the user
  **/
 
 router.get("/:username", ensureLoggedIn, async function (req, res, next) {
@@ -76,7 +76,7 @@ router.get("/:username", ensureLoggedIn, async function (req, res, next) {
  *
  * Returns { username, firstName, lastName, email, isAdmin }
  *
- * Authorization required: login
+ * Authorization required: login and either is an Admin or is the user
  **/
 
 router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
@@ -97,7 +97,7 @@ router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
 
 /** DELETE /[username]  =>  { deleted: username }
  *
- * Authorization required: login
+ * Authorization required: login and either is an Admin or is the user
  **/
 
 router.delete("/:username", ensureLoggedIn, async function (req, res, next) {
