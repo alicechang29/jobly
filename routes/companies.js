@@ -20,7 +20,7 @@ const router = new Router();
  *
  * Returns { handle, name, description, numEmployees, logoUrl }
  *
- * Authorization required: login and is Admin
+ * Authorization required: logged in admin
  */
 
 router.post("/", ensureLoggedInAdmin, async function (req, res, next) {
@@ -101,7 +101,7 @@ router.get("/:handle", async function (req, res, next) {
  *
  * Returns { handle, name, description, numEmployees, logo_url }
  *
- * Authorization required: login and is Admin
+ * Authorization required: logged in admin
  */
 
 router.patch("/:handle", ensureLoggedInAdmin, async function (req, res, next) {
@@ -121,7 +121,7 @@ router.patch("/:handle", ensureLoggedInAdmin, async function (req, res, next) {
 
 /** DELETE /[handle]  =>  { deleted: handle }
  *
- * Authorization: login and is Admin
+ * Authorization: logged in admin
  */
 
 router.delete("/:handle", ensureLoggedInAdmin, async function (req, res, next) {
