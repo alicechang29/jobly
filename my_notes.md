@@ -48,14 +48,13 @@ Middleware auth check Req:
 
 USERS
 START HERE -- TODO:
-routes go in order
-- if CUD - check if self user first
-- if not self user, then check admin
+- fixed tests for middleware - auth.test
+
 
 
 1. check if req.params (:username) is = to res.locals.user.username
 2. figure out the route ordering... how to skip a next?
-
+https://expressjs.com/en/guide/using-middleware.html#:~:text=To%20skip%20the%20rest%20of,or%20router.METHOD()%20functions.
 
 
 
