@@ -54,7 +54,7 @@ routes go in order
 
 
 1. check if req.params (:username) is = to res.locals.user.username
-2.
+2. figure out the route ordering... how to skip a next?
 
 
 
