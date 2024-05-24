@@ -50,9 +50,23 @@ function ensureAdmin(req, res, next) {
 
 }
 
+/** Middleware to check if user must match username in route
+ * If true, skips the next function.
+ * If false, calls next().
+ */
+
+function userCheck(req, res, next) {
+
+  if (res.locals.user.username === req.params.username) {
+    return next('route'); //FIXME: how to call next twice
+  }
+  return next();
+}
+
 
 export {
   authenticateJWT,
   ensureLoggedIn,
-  ensureAdmin
+  ensureAdmin,
+  userCheck
 };
