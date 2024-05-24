@@ -26,9 +26,9 @@ CREATE TABLE jobs (
 );
 
 CREATE TABLE applications (
-  username VARCHAR(25)
+  username VARCHAR(25) NOT NULL
     REFERENCES users ON DELETE CASCADE,
-  job_id INTEGER
+  job_id INTEGER NOT NULL
     REFERENCES jobs ON DELETE CASCADE,
   PRIMARY KEY (username, job_id)
 );
