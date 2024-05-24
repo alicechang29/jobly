@@ -38,15 +38,6 @@ describe("POST /companies", function () {
     numEmployees: 10,
   };
 
-  test("unauth for non-admin users", async function () {
-    const resp = await request(app)
-      .post("/companies")
-      .send(newCompany)
-      .set("authorization", `Bearer ${u2Token}`);
-    expect(resp.statusCode).toEqual(401);
-  });
-
-
   test("ok for admin users", async function () {
     const resp = await request(app)
       .post("/companies")
@@ -56,6 +47,14 @@ describe("POST /companies", function () {
     expect(resp.body).toEqual({
       company: newCompany,
     });
+  });
+
+  test("unauth for non-admin users", async function () {
+    const resp = await request(app)
+      .post("/companies")
+      .send(newCompany)
+      .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(401);
   });
 
   test("bad request with missing data", async function () {
@@ -136,10 +135,6 @@ describe("GET /companies", function () {
       });
   });
 
-  //FIXME: why isn't this working
-  // afterEach(async function () {
-  //   await db.query("ROLLBACK");
-  // });
 
   test("Filters by similar company name",
     async function () {
