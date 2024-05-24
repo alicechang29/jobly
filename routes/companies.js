@@ -4,7 +4,7 @@ import jsonschema from "jsonschema";
 import { Router } from "express";
 
 import { BadRequestError } from "../expressError.js";
-import { ensureLoggedIn } from "../middleware/auth.js";
+import { ensureLoggedIn, ensureAdmin } from "../middleware/auth.js";
 import Company from "../models/company.js";
 import compNewSchema from "../schemas/compNew.json" with { type: "json" };
 import compUpdateSchema from "../schemas/compUpdate.json" with { type: "json" };
@@ -23,7 +23,8 @@ const router = new Router();
  * Authorization required: login
  */
 
-router.post("/", ensureLoggedIn, async function (req, res, next) {
+router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+
   const validator = jsonschema.validate(
     req.body,
     compNewSchema,
