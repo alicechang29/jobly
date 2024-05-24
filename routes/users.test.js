@@ -351,7 +351,7 @@ describe("PATCH /users/:username", () => {
 });
 
 /************************************** DELETE /users/:username */
-//FIXME: should only work for admins or is user themselves
+
 describe("DELETE /users/:username", function () {
   test("works for admin users", async function () {
     const resp = await request(app)
