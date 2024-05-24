@@ -43,30 +43,36 @@ function ensureLoggedIn(req, res, next) {
  * If not, raises Unauthorized.
  */
 
-function ensureAdmin(req, res, next) {
+function ensureLoggedInAdmin(req, res, next) {
 
-  if (res.locals.user.isAdmin === true) return next();
+  if (res.locals.user?.isAdmin === true) return next();
   throw new UnauthorizedError();
 
 }
 
-/** Middleware to check if user must match username in route
- * If true, skips the next function.
- * If false, calls next().
+/** Middleware to check if user matches the username in the route or if
+ * the user is an admin.
+ *
+ * If not, raises Unauthorized.
  */
 
-function userCheck(req, res, next) {
+function ensureCorrectUserOrAdmin(req, res, next) {
 
-  if (res.locals.user.username === req.params.username) {
-    return next('route'); //FIXME: how to call next twice
+  if (
+    res.locals.user?.username === req.params.username ||
+    res.locals.user?.isAdmin === true
+  ) {
+    return next();
   }
-  return next();
+
+  throw new UnauthorizedError();
+
 }
 
 
 export {
   authenticateJWT,
   ensureLoggedIn,
-  ensureAdmin,
-  userCheck
+  ensureLoggedInAdmin,
+  ensureCorrectUserOrAdmin
 };
