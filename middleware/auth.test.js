@@ -5,11 +5,13 @@ import { UnauthorizedError } from "../expressError.js";
 import {
   authenticateJWT,
   ensureLoggedIn,
+  ensureAdmin
 } from "./auth.js";
 import { SECRET_KEY } from "../config.js";
 
 const testJwt = jwt.sign({ username: "test", isAdmin: false }, SECRET_KEY);
 const badJwt = jwt.sign({ username: "test", isAdmin: false }, "wrong");
+const adminJwt = jwt.sign({ username: "adminTest", isAdmin: true }, SECRET_KEY);
 
 function next(err) {
   if (err) throw new Error("Got error from middleware");
@@ -56,13 +58,51 @@ describe("ensureLoggedIn", function () {
     const req = {};
     const res = { locals: {} };
     expect(() => ensureLoggedIn(req, res, next))
-        .toThrow(UnauthorizedError);
+      .toThrow(UnauthorizedError);
   });
 
   test("unauth if no valid login", function () {
     const req = {};
-    const res = { locals: { user: { } } };
+    const res = { locals: { user: {} } };
     expect(() => ensureLoggedIn(req, res, next))
-        .toThrow(UnauthorizedError);
+      .toThrow(UnauthorizedError);
+  });
+});
+
+
+describe("ensureAdmin", function () {
+  test("works", function () {
+    const req = {};
+    const res = {
+      locals: {
+        user: {
+          username: "adminTest",
+          isAdmin: true
+        }
+      }
+    };
+
+    ensureAdmin(req, res, next);
+  });
+
+  test("unauth if not admin", function () {
+    const req = {};
+    const res = {
+      locals: {
+        user: {
+          username: "test",
+          isAdmin: "false"
+        }
+      }
+    };
+    expect(() => ensureAdmin(req, res, next))
+      .toThrow(UnauthorizedError);
+  });
+
+  test("unauth if no valid login", function () {
+    const req = {};
+    const res = { locals: { user: {} } };
+    expect(() => ensureAdmin(req, res, next))
+      .toThrow(UnauthorizedError);
   });
 });
