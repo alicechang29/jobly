@@ -27,7 +27,7 @@ afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
 /************************************** POST /users */
-//FIXME: should only work for admins
+
 describe("POST /users", function () {
   test("works for admin users: create non-admin", async function () {
     const resp = await request(app)
