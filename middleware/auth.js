@@ -38,29 +38,33 @@ function ensureLoggedIn(req, res, next) {
   throw new UnauthorizedError();
 }
 
-/** Middleware to use when user must be admin.
+/** Middleware to use when user must be a logged in admin.
  *
  * If not, raises Unauthorized.
  */
 
 function ensureLoggedInAdmin(req, res, next) {
+  const currUser = res.locals.user;
 
-  if (res.locals.user?.isAdmin === true) return next();
+  if (currUser?.username && currUser?.isAdmin === true) {
+    return next();
+  }
+
   throw new UnauthorizedError();
-
 }
 
-/** Middleware to check if user matches the username in the route or if
+/** Middleware to check if logged in user matches the username in the route or if
  * the user is an admin.
  *
  * If not, raises Unauthorized.
  */
 
 function ensureCorrectUserOrAdmin(req, res, next) {
+  const currUser = res.locals.user;
 
   if (
-    res.locals.user?.username === req.params.username ||
-    res.locals.user?.isAdmin === true
+    currUser?.username === req.params.username ||
+    currUser?.username && currUser?.isAdmin === true
   ) {
     return next();
   }
