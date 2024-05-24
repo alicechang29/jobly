@@ -12,7 +12,6 @@ import { SECRET_KEY } from "../config.js";
 
 const testJwt = jwt.sign({ username: "test", isAdmin: false }, SECRET_KEY);
 const badJwt = jwt.sign({ username: "test", isAdmin: false }, "wrong");
-const adminJwt = jwt.sign({ username: "adminTest", isAdmin: true }, SECRET_KEY);
 
 function next(err) {
   if (err) throw new Error("Got error from middleware");
