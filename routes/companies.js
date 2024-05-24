@@ -4,7 +4,7 @@ import jsonschema from "jsonschema";
 import { Router } from "express";
 
 import { BadRequestError } from "../expressError.js";
-import { ensureLoggedIn, ensureAdmin } from "../middleware/auth.js";
+import { ensureLoggedIn, ensureLoggedInAdmin } from "../middleware/auth.js";
 import Company from "../models/company.js";
 import compNewSchema from "../schemas/compNew.json" with { type: "json" };
 import compUpdateSchema from "../schemas/compUpdate.json" with { type: "json" };
@@ -23,7 +23,7 @@ const router = new Router();
  * Authorization required: login and is Admin
  */
 
-router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+router.post("/", ensureLoggedInAdmin, async function (req, res, next) {
 
   const validator = jsonschema.validate(
     req.body,
@@ -72,7 +72,7 @@ router.get("/", async function (req, res, next) {
     throw new BadRequestError(errs);
   }
 
-  const constructedWhereClause = await Company.constructWhereClause(parsedQuery);
+  const constructedWhereClause = Company.constructWhereClause(parsedQuery);
 
   companies = await Company.getCompaniesBySearch(constructedWhereClause);
 
@@ -104,7 +104,7 @@ router.get("/:handle", async function (req, res, next) {
  * Authorization required: login and is Admin
  */
 
-router.patch("/:handle", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+router.patch("/:handle", ensureLoggedInAdmin, async function (req, res, next) {
   const validator = jsonschema.validate(
     req.body,
     compUpdateSchema,
@@ -124,7 +124,7 @@ router.patch("/:handle", ensureLoggedIn, ensureAdmin, async function (req, res, 
  * Authorization: login and is Admin
  */
 
-router.delete("/:handle", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+router.delete("/:handle", ensureLoggedInAdmin, async function (req, res, next) {
   await Company.remove(req.params.handle);
   return res.json({ deleted: req.params.handle });
 });
