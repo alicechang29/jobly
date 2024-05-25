@@ -11,6 +11,8 @@ FIXME: JOBS MODEL WHERE CLAUSE IS INCORRECT
 -   "whereClause": "\"title\" ILIKE $1 AND \"salary\" >=$2 AND \"equity\" >$3",
 +   "whereClause": "\"title\" ILIKE $1 AND \"salary\" >=$2 AND \"title\" ILIKE $3 AND \"salary\" >=$4",
 
+ISSUE IN turning hasEquity = true into equity
+
 TODO:
 1. finish creating tests for jobs model
 2. create tests for job routes
