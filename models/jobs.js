@@ -121,12 +121,10 @@ class Job {
         i++;
       }
 
-      if ("hasEquity" in filteredData) {
-        if (filteredData.hasEquity === true) {
-          whereClause.push(`"equity" >$${i + 1}`);
-          values.push(0);
-          i++;
-        }
+      if (filteredData.hasEquity === true) {
+        whereClause.push(`"equity" >$${i + 1}`);
+        values.push(0);
+        i++;
       }
     }
 
