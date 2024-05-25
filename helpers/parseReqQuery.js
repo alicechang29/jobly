@@ -18,6 +18,7 @@ import { BadRequestError } from "../expressError.js";
  */
 function parseReqQuery(reqQuery) {
 
+  //fields related to company search
   if ("minEmployees" in reqQuery) {
     reqQuery.minEmployees = Number(reqQuery.minEmployees);
 
@@ -34,6 +35,11 @@ function parseReqQuery(reqQuery) {
     if (reqQuery.minEmployees > reqQuery.maxEmployees) {
       throw new BadRequestError("min needs to be less than max input");
     }
+  }
+
+  //fields related to job search
+  if ("minSalary" in reqQuery) {
+    reqQuery.minSalary = Number(reqQuery.minSalary);
   }
 
   console.log("parse", reqQuery);
