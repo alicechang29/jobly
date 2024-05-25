@@ -1,2 +1,2 @@
 ## Install
-`$ npm install passport`
+`$ npm install`
