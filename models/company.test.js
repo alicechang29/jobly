@@ -277,7 +277,7 @@ describe("constructWhereClause", function () {
 
     const parsedData = parseReqQuery(reqQuery);
 
-    const whereClauseValues = await Company.constructWhereClause(parsedData);
+    const whereClauseValues = Company.constructWhereClause(parsedData);
 
     expect(whereClauseValues).toEqual({
       whereClause: '"name" ILIKE $1',
@@ -296,7 +296,7 @@ describe("constructWhereClause", function () {
 
     const parsedData = parseReqQuery(reqQuery);
 
-    const whereClauseValues = await Company.constructWhereClause(parsedData);
+    const whereClauseValues = Company.constructWhereClause(parsedData);
 
     expect(whereClauseValues).toEqual(
       {
