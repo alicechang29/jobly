@@ -311,7 +311,7 @@ describe("constructWhereClause", function () {
       {
         whereClause:
           '"title" ILIKE $1 AND "salary" >=$2 AND "equity" >$3',
-        values: ["%j%", 100, 0]
+        values: ["%J%", 100, 0]
       }
     );
 
