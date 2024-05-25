@@ -1,3 +1,25 @@
+Code Review Q's
+- stored numeric data as Numeric bc it uses exact storage and calculations for monetary amounts
+- Floating point types are inexact, will store the numbers as approximations
+    - comparing 2 floating point numbers for equality might not work as expected
+
+NOTES: when Numeric values are sent to JS, they are sent as strings
+bc JS only processes floating point numbers, which are inaccurate.
+
+FIXME: JOBS MODEL WHERE CLAUSE IS INCORRECT
+
+-   "whereClause": "\"title\" ILIKE $1 AND \"salary\" >=$2 AND \"equity\" >$3",
++   "whereClause": "\"title\" ILIKE $1 AND \"salary\" >=$2 AND \"title\" ILIKE $3 AND \"salary\" >=$4",
+
+TODO:
+1. finish creating tests for jobs model
+2. create tests for job routes
+3. create jobs schema
+4. create routes for jobs
+5. create route for companies that shows all jobs
+
+
+
 
 # Authorization
 
