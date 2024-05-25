@@ -20,28 +20,23 @@ class Job {
         FROM companies
         WHERE handle = $1`, [companyHandle]);
 
-    if (companyCheck.rows[0])
+    if (!companyCheck.rows[0])
       throw new BadRequestError(`${companyHandle} doesn't exist.`);
 
     const result = await db.query(`
-                INSERT INTO jobs (id,
+                INSERT INTO jobs (
                                   title,
                                   salary,
                                   equity,
-                                  company_handle AS "companyHandle")
-                VALUES ($1, $2, $3, $4, $5)
+                                  company_handle)
+                VALUES ($1, $2, $3, $4)
                 RETURNING
                         id,
                         title,
                         salary,
                         equity,
-                        company_handle AS "companyHandle"`, [
-      id,
-      title,
-      salary,
-      equity,
-      companyHandle,
-    ],
+                        company_handle AS "companyHandle"`,
+      [title, salary, equity, companyHandle]
     );
     const job = result.rows[0];
 
@@ -104,6 +99,8 @@ class Job {
         values: ['manager', 70000, 0]
       }
    */
+
+  //FIXME: THIS IS WRONG
   static constructWhereClause(filteredData) {
     const keys = Object.keys(filteredData);
 
@@ -120,9 +117,10 @@ class Job {
       }
       if ("minSalary" in filteredData) {
         whereClause.push(`"salary" >=$${i + 1}`);
-        values.push(filteredData.minEmployees);
+        values.push(filteredData.minSalary);
         i++;
       }
+
       if ("hasEquity" in filteredData) {
         if (filteredData.hasEquity === true) {
           whereClause.push(`"equity" >$${i + 1}`);
@@ -178,7 +176,9 @@ class Job {
    */
 
   static async update(id, data) {
-    const { setCols, values } = sqlForPartialUpdate(data);
+    const { setCols, values } = sqlForPartialUpdate(data,
+      { title: "title" }
+    );
     const idVarIdx = "$" + (values.length + 1);
 
     const querySql = `
