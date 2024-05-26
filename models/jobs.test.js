@@ -314,7 +314,26 @@ describe("constructWhereClause", function () {
         values: ["%J%", 100, 0]
       }
     );
-
-
   });
+
+  test("construct where clause without equity", async function () {
+
+    const reqQuery = {
+      title: 'J',
+      minSalary: '100'
+    };
+
+    const parsedData = parseReqQuery(reqQuery);
+
+    const whereClauseValues = Job.constructWhereClause(parsedData);
+
+    expect(whereClauseValues).toEqual(
+      {
+        whereClause:
+          '"title" ILIKE $1 AND "salary" >=$2',
+        values: ["%J%", 100]
+      }
+    );
+  });
+
 });
