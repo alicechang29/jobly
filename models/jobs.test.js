@@ -268,7 +268,7 @@ describe("constructWhereClause", function () {
     const reqQuery = {
       title: 'J',
       minSalary: '100',
-      hasEquity: 'true'
+      hasEquity: true
     };
 
     const parsedData = parseReqQuery(reqQuery);
@@ -280,27 +280,27 @@ describe("constructWhereClause", function () {
 
   });
 
-  // test("construct where clause with only 1 input", async function () {
+  test("construct where clause with only 1 input", async function () {
 
-  //   const reqQuery = { nameLike: 'j' };
+    const reqQuery = { title: 'j' };
 
-  //   const parsedData = parseReqQuery(reqQuery);
+    const parsedData = parseReqQuery(reqQuery);
 
-  //   const whereClauseValues = Job.constructWhereClause(parsedData);
+    const whereClauseValues = Job.constructWhereClause(parsedData);
 
-  //   expect(whereClauseValues).toEqual({
-  //     whereClause: '"title" ILIKE $1',
-  //     values: ["%j%"]
-  //   });
+    expect(whereClauseValues).toEqual({
+      whereClause: '"title" ILIKE $1',
+      values: ["%j%"]
+    });
 
-  // });
+  });
 
   test("construct where clause with 3 inputs", async function () {
 
     const reqQuery = {
       title: 'J',
       minSalary: '100',
-      hasEquity: 'true'
+      hasEquity: true
     };
 
     const parsedData = parseReqQuery(reqQuery);
