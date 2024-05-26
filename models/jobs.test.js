@@ -31,31 +31,29 @@ describe("create", function () {
   const newJob = {
     title: "manager",
     salary: 100000,
-    equity: 0,
+    equity: "0",
     companyHandle: "c1"
   };
 
-  // test("create job for company that exists", async function () {
-  //   let job = await Job.create(newJob);
-  //   expect(job).toEqual(newJob);
+  test("create job for company that exists", async function () {
+    let job = await Job.create(newJob);
 
-  //   const result = await db.query(
-  //     `SELECT id, title, salary, equity, company_handle AS companyHandle
-  //      FROM jobs
-  //      WHERE company_handle = 'c1'
-  //      ORDER BY id DESC`);
+    const result = await db.query(
+      `SELECT id, title, salary, equity, company_handle AS "companyHandle"
+       FROM jobs
+       WHERE company_handle = 'c1'
+       ORDER BY id DESC`);
 
-  //   //FIXME: why is this expect.any(Number) not working???
-  //   expect(result.rows[0]).toEqual([
-  //     {
-  //       id: expect.any(Number),
-  //       title: "manager",
-  //       salary: 100000,
-  //       equity: "0",
-  //       companyHandle: "c1"
-  //     }
-  //   ]);
-  // });
+    expect(result.rows[0]).toEqual(
+      {
+        id: expect.any(Number),
+        title: "manager",
+        salary: 100000,
+        equity: "0",
+        companyHandle: "c1"
+      }
+    );
+  });
 
   test("401, create job for company that doesn't exist",
     async function () {
