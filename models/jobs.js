@@ -100,7 +100,6 @@ class Job {
       }
    */
 
-  //FIXME: THIS IS WRONG
   static constructWhereClause(filteredData) {
     const keys = Object.keys(filteredData);
 
