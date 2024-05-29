@@ -1,6 +1,7 @@
 import db from "../db.js";
 import User from "../models/user";
 import Company from "../models/company";
+import Job from "../models/jobs.js";
 import { createToken } from "../helpers/tokens";
 
 
@@ -59,6 +60,21 @@ async function commonBeforeAll() {
     password: "password3",
     isAdmin: false,
   });
+
+  await Job.create(
+    {
+      title: "j1",
+      salary: 50000,
+      equity: 0.1,
+      companyHandle: "c1",
+    });
+  await Job.create(
+    {
+      title: "j2",
+      salary: 60000,
+      equity: 0.2,
+      companyHandle: "c2",
+    });
 
 }
 
