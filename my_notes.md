@@ -6,17 +6,14 @@ Code Review Q's
 NOTES: when Numeric values are sent to JS, they are sent as strings
 bc JS only processes floating point numbers, which are inaccurate.
 
-FIXME: JOBS MODEL WHERE CLAUSE IS INCORRECT
-
--   "whereClause": "\"title\" ILIKE $1 AND \"salary\" >=$2 AND \"equity\" >$3",
-+   "whereClause": "\"title\" ILIKE $1 AND \"salary\" >=$2 AND \"title\" ILIKE $3 AND \"salary\" >=$4",
-
-ISSUE IN turning hasEquity = true into equity
 
 TODO:
-1. finish creating tests for jobs model
+1. finish creating tests for jobs model - DONE
 2. create tests for job routes
-3. create jobs schema
+    - write tests for GET and POST routes - DONE
+    - write routes for GET and POST routes TODO:
+    - write job schema to test the routes
+    - not done: PATCH, DELETE
 4. create routes for jobs
 5. create route for companies that shows all jobs
 
