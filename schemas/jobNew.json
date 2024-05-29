@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://our.company.com/companyNew.schema.json",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "salary": {
+      "type": "string",
+      "minimum": 0
+    },
+    "equity": {
+      "enum": [ true, false ]
+    },
+    "companyHandle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "salary",
+    "equity",
+    "companyHandle"
+  ]
+}
